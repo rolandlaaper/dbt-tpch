@@ -29,11 +29,11 @@ models:
   dbt_tpch:
 
       vars:
-        max_ship_date: "'1995-12-01'"
+        max_ship_date: "'1998-12-01'"
 
       base:
         schema: base
       ods:
         schema: ods
-      wh:
-        schema: wh
+      datamart:
+        schema: datamart
