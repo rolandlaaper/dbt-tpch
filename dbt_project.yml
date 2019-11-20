@@ -31,9 +31,9 @@ models:
       vars:
         max_ship_date: "'1998-12-01'"
 
-      base:
-        schema: base
-      ods:
-        schema: ods
-      datamart:
+      1-bronnen:
+        schema: bronnen
+      2-dwh:
+        schema: dwh
+      3-datamart:
         schema: datamart
