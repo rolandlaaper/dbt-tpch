@@ -25,15 +25,26 @@ quoting:
     identifier: false
     schema: false
 
+# run project hooks
+on-run-start:
+    - "create table if not exists _DBT.audit (event_name varchar(255),event_timestamp TIMESTAMP_LTZ(9), event_schema varchar(255), event_model varchar(255))"
+on-run-end:
+    - "grant usage on schema datamart to db_reader"
+    - "grant select on all tables in schema datamart to db_reader"   
+
 models:
   dbt_tpch:
 
       vars:
-        max_ship_date: "'1998-12-01'"
+        max_order_date: "'1995-01-01'"
 
-      1-bronnen:
-        schema: bronnen
+      pre-hook:  "insert into _dbt.audit (event_name, event_timestamp, event_schema, event_model) values ( 'starting model deployment', current_timestamp(), '{{this.schema}}', '{{this.name}}')"
+      
+      post-hook: "insert into _dbt.audit (event_name, event_timestamp, event_schema, event_model) values ( 'completed model deployment', current_timestamp(), '{{this.schema}}', '{{this.name}}')"  
+
       2-dwh:
         schema: dwh
+        materialized: view
+
       3-datamart:
         schema: datamart
