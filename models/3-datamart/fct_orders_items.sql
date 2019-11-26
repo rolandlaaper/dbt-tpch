@@ -8,11 +8,7 @@ with orders_items as (
     select * from {{ ref('orders_items') }}
 
 ),
-parts_suppliers as (
-    
-    select * from {{ ref('parts_suppliers') }}
 
-),
 final as (
     select 
 
@@ -31,8 +27,6 @@ final as (
         o.commit_date,
         o.receipt_date,
         o.ship_mode_name,
-        ps.supplier_cost_amount,
-        {# ps.retail_price, #}
         o.base_price,
         o.discount_percentage,
         o.discounted_price,
@@ -49,15 +43,18 @@ final as (
 
     from
         orders_items o
-        join
-        parts_suppliers ps
-            on o.part_key = ps.part_key and
-                o.supplier_key = ps.supplier_key
+
 )
 select 
     f.*,
     {{ dbt_housekeeping() }}
 from
     final f
+
+-- Laadt alleen de laatste 3 dagen aan data in een dev omgeving
+{% if target.name == 'xxx' %}
+where order_date >= dateadd('day', -3, current_date)
+{% endif %}
+
 order by
     f.order_date

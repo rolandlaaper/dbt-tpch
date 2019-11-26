@@ -1,6 +1,6 @@
 {{
     config(
-        materialized = 'table'
+        materialized = 'incremental'
     )
 }}
 with orders as (
@@ -25,6 +25,7 @@ order_item_summary as (
     group by
         1
 ),
+
 final as (
 
     select 
@@ -47,6 +48,14 @@ final as (
         join
         order_item_summary s
             on o.order_key = s.order_key
+
+    {% if is_incremental() %}
+    
+    -- this filter will only be applied on an incremental run
+    where o.order_date > IFNULL((select max(order_date) from {{ this }}),'1980-01-01')
+    
+    {% endif %}       
+
 )
 select 
     f.*,

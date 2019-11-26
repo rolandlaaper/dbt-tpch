@@ -1,0 +1,55 @@
+version: 2
+
+sources:
+  - name: tpch
+    database: SNOWFLAKE_SAMPLE_DATA
+    schema: TPCH_SF1
+    loader: Snowflake
+
+
+    
+    quoting:
+      database: false
+      schema: false
+      identifier: false
+      
+    tables:
+
+# Tabel orders
+      - name: orders
+        loaded_at_field: O_ORDERDATE
+        freshness:
+          warn_after: {count: 12, period: hour}
+          error_after: {count: 24, period: hour}
+
+        columns:
+          - name: O_ORDERKEY
+            description: "Primary van de order tabel"
+
+          - name: O_ORDERDATE
+            description: "Orderdatum"
+
+          - name: O_CUSTKEY
+            description: "Referentie naar de klant"
+          
+          - name: O_ORDERSTATUS
+            description: "Status van de order"
+          
+          - name: O_TOTALPRICE
+            description: "Totaalprijs"              
+          
+          - name: O_ORDERPRIORITY
+            description: "Prioriteit van de order"
+          
+          - name: O_CLERK
+            description: ""
+          
+          - name: O_SHIPPRIORITY
+            description: "Prioriteit van de verzending"
+          
+          - name: O_COMMENT
+            description: "Commentaar over de order"
+
+#Overige tabellen
+      - name: customer
+      - name: lineitem

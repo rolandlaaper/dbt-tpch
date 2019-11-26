@@ -2,6 +2,66 @@ version: 2
 
 models:
 
+#FCT_ORDER
+    - name: fct_orders
+      columns:
+          - name: order_key
+            description: unique key for each order from source system
+            tests:
+                - unique
+                - not_null
+
+          - name: order_date
+            description: date the order was placed
+            tests:
+                - not_null 
+
+          - name: customer_key
+            description: reference to `dim_customer`
+            tests:
+                - not_null                
+                - relationships:
+                    to: ref('dim_customer')
+                    field: customer_key
+                    
+          - name: order_status_code
+            tests:
+                - not_null
+                
+          - name: order_priority_code
+            tests:
+                - not_null
+                
+          - name: order_clerk_name
+            tests:
+                - not_null
+                
+          - name: shipping_priority
+            tests:
+                - not_null
+                                
+          - name: gross_item_sales_amount
+            description: pre-discount total of all ordered items
+            tests:
+                - not_null
+                
+          - name: item_discount_amount
+            description: discount amount for the order
+            tests:
+                - not_null
+                
+          - name: item_tax_amount
+            description: tax amount for the order
+            tests:
+                - not_null
+                
+          - name: net_item_sales_amount
+            description: amount of all items on the order after discounts and tax
+            tests:
+                - not_null
+                
+
+#FCT_ORDER_ITEMS
     - name: fct_orders_items
       columns:
           - name: order_item_key
@@ -34,19 +94,10 @@ models:
 
           - name: part_key
             description: reference to `dim_part`
-            tests:
-                - not_null
-                - relationships:
-                    to: ref('dim_part')
-                    field: part_key
+
 
           - name: supplier_key
             description: reference to `dim_supplier`
-            tests:
-                - not_null
-                - relationships:
-                    to: ref('dim_supplier')
-                    field: supplier_key
 
           - name: return_status_code
             description: return status
@@ -83,10 +134,6 @@ models:
             tests:
                 - not_null
 
-          - name: supplier_cost_amount
-            description: item cost from supplier
-            tests:
-                - not_null
 
           - name: base_price
             description: item price before discount 

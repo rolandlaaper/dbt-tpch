@@ -1,8 +1,5 @@
-{{
-    config(
-        materialized = 'ephemeral'
-    )
-}}
+
+
 select
     o_orderkey as order_key, 
     o_custkey as customer_key,
@@ -15,3 +12,6 @@ select
     o_comment as order_comment
 from
     {{ source('tpch', 'orders') }}
+
+
+ where o_orderdate <=  {{ var('max_order_date') }}    
