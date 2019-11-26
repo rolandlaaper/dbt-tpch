@@ -16,7 +16,7 @@ select *
 from 
 	data
 where 
-	GROSS_ITEM_SALES_AMOUNT != '267260.8500'
+	GROSS_ITEM_SALES_AMOUNT != '367260.8500'
 )
 
 select * from validation
