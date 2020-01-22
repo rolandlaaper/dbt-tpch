@@ -29,14 +29,14 @@ quoting:
 on-run-start:
     - "create table if not exists _DBT.audit (event_name varchar(255),event_timestamp TIMESTAMP_LTZ(9), event_schema varchar(255), event_model varchar(255))"
 on-run-end:
-    - "grant usage on schema datamart to db_reader"
-    - "grant select on all tables in schema datamart to db_reader"   
+    - "grant usage on schema datamart to public"
+    - "grant select on all tables in schema datamart to public"   
 
 models:
   dbt_tpch:
 
       vars:
-        max_order_date: "'1995-01-01'"
+        max_order_date: "'1997-01-01'"
 
       pre-hook:  "insert into _dbt.audit (event_name, event_timestamp, event_schema, event_model) values ( 'starting model deployment', current_timestamp(), '{{this.schema}}', '{{this.name}}')"
       
@@ -44,7 +44,7 @@ models:
 
       2-dwh:
         schema: dwh
-        materialized: view
+        materialized: table
 
       3-datamart:
         schema: datamart
