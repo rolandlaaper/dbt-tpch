@@ -36,7 +36,7 @@ models:
   dbt_tpch:
 
       vars:
-        max_order_date: "'1997-01-01'"
+        max_order_date: "'1998-01-01'"
 
       pre-hook:  "insert into _dbt.audit (event_name, event_timestamp, event_schema, event_model) values ( 'starting model deployment', current_timestamp(), '{{this.schema}}', '{{this.name}}')"
       
@@ -44,7 +44,7 @@ models:
 
       2-dwh:
         schema: dwh
-        materialized: table
+        materialized: view
 
       3-datamart:
         schema: datamart
