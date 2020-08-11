@@ -1,8 +1,11 @@
 {{
     config(
-        materialized = 'incremental'
+        materialized = 'incremental',
+        schema='marketing'
     )
 }}
+
+
 with orders as (
     
     select * from {{ ref('orders') }}

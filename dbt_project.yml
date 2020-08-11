@@ -16,9 +16,9 @@ clean-targets:         # directories to be removed by `dbt clean`
     - "target"
     - "dbt_modules"
 
-profile: tpch
+profile: VGZ Snowflake dev
 
-require-dbt-version: ">=0.13.1"
+require-dbt-version: ">=0.17.1"
 
 quoting:
     database: false
@@ -43,9 +43,9 @@ models:
       post-hook: "insert into _dbt.audit (event_name, event_timestamp, event_schema, event_model) values ( 'completed model deployment', current_timestamp(), '{{this.schema}}', '{{this.name}}')"  
 
       2-dwh:
-        schema: dwh
+        +schema: dwh
         materialized: table
 
       3-datamart:
-        schema: datamart
+        +schema: datamart
         
