@@ -30,7 +30,7 @@ from
 )
 select 
 
-    {{ dbt_utils.surrogate_key('o.order_key', 'l.order_line_number') }} as order_item_key,
+    {{ dbt_utils.surrogate_key(['o.order_key', 'l.order_line_number']) }} as order_item_key,
 
     o.order_key,
     o.order_date,
