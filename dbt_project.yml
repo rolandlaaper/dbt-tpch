@@ -4,6 +4,8 @@
 # name or the intended use of these models
 name: 'dbt_tpch'
 version: '1.0'
+config-version: 2
+
 
 source-paths: ["models"]
 analysis-paths: ["analysis"] 
@@ -16,9 +18,9 @@ clean-targets:         # directories to be removed by `dbt clean`
     - "target"
     - "dbt_modules"
 
-profile: tpch
+profile: dataproject1
 
-require-dbt-version: ">=0.13.1"
+#require-dbt-version: ">=0.13.1"
 
 quoting:
     database: false
@@ -32,11 +34,13 @@ on-run-end:
     - "grant usage on schema datamart to public"
     - "grant select on all tables in schema datamart to public"   
 
+vars:
+   max_order_date: "'1998-01-01'"
+
 models:
   dbt_tpch:
 
-      vars:
-        max_order_date: "'1998-01-01'"
+
 
       pre-hook:  "insert into _dbt.audit (event_name, event_timestamp, event_schema, event_model) values ( 'starting model deployment', current_timestamp(), '{{this.schema}}', '{{this.name}}')"
       
