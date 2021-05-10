@@ -9,7 +9,7 @@ select
     o_orderpriority as order_priority_code,
     o_clerk as order_clerk_name,
     o_shippriority as shipping_priority,
-    o_comment as order_comment
+    o_comment as order_comment --blblabla
 from
     {{ source('tpch', 'orders') }}
 
