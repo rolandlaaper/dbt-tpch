@@ -7,7 +7,7 @@
       unique_key='c_custkey',
 
       strategy='check',
-      check_cols='all',
+      check_cols=dbt 
     )
 }}
 
