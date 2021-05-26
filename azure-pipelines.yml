@@ -1,0 +1,47 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+container: 
+  image: python:3.7
+  options: -u root
+
+
+stages:
+- stage: Stage1
+  steps:
+  - script: |
+    echo 'blabla'
+  displayName: 'testdisplayname'
+
+
+- stage: Stage2
+  steps:
+
+  - task: DownloadSecureFile@1
+    name: SettingProfile
+    displayName: 'Downloading Profile for Snowflake'
+    inputs:
+      secureFile: 'devops_test.yml'
+
+  - script: |
+      echo Installing $(SettingProfile.secureFilePath) to the ~/.dbt...
+      mkdir ~/.dbt
+      cp $(SettingProfile.secureFilePath) ~/.dbt/profiles.yml
+    displayName: Installing Profile for Snowflake
+      
+  - script: |
+      pip install dbt --user
+      export PATH=$PATH:/home/vsts_azpcontainer/.local/bin
+      cd snowflake_tpc_demo
+      dbt compile
+      dbt run
+      dbt test
+    displayName: 'Compile, Test, and Run'
